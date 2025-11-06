@@ -17,6 +17,9 @@ translate dx dy shape = shape
   , y = shape.y + dy
   }
 
+
+centerrect = {x: 250.0, y: 250.0, width: 100.0, height: 100.0}
+
 main :: Effect Unit
 main = void $ unsafePartial do
   Just canvas <- getCanvasElementById "canvas"
@@ -80,3 +83,40 @@ main = void $ unsafePartial do
                                    , y: 50.0
                                    , width: 100.0
                                    , height: 100.0}
+
+  -- two squares left center
+  strokePath ctx $ do
+     setStrokeStyle ctx "#80FFF0"
+     rect ctx $ translate (-150.0) 0.0 centerrect
+     rect ctx $ translate (-150.0) 110.0 centerrect
+
+  -- translation of similar code into non-do format.
+  -- two squares right center
+  -- The outer parens are required, or replace by "$".
+  {- strokePath ctx (setStrokeStyle ctx "#10D0A0" >>=
+                  \_ -> rect ctx (translate 150.0 0.0 centerrect) >>=
+                  \_ -> rect ctx (translate 150.0 110.0 centerrect))
+                  -}
+
+  -- two squares right center
+  let twoboxer = (setStrokeStyle ctx "#8080F0" >>=
+                  \_ -> rect ctx (translate 150.0 0.0 centerrect) >>=
+                  \_ -> rect ctx (translate 150.0 110.0 centerrect))
+
+  -- Create a dummy value of type Effect Unit:
+  let maybeignored = setStrokeStyle ctx "#00FFF0"
+
+  -- displays squares:
+  strokePath ctx twoboxer
+  -- doesn't display squares:
+  strokePath ctx maybeignored
+  -- This shows that the second arg to strokepath is not ignored.
+  -- I was thinking maybe that all it did was build up the context,
+  -- which was the only thing that was responsible for display.
+
+  -- Yet in the definition of twoboxer, the return values of
+  -- setStrokeStyle and the first rect, at least, are ignored.
+  -- So either the second rect is returning something used by strokePath,
+  -- or ... I don't know---something about ctx? 
+  -- But twoboxter can only contain the return value of the second rect, right?
+  -- It's not like a Lisp-2 e.g. Common Lisp with a separate function value.
