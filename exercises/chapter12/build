@@ -1,0 +1,2 @@
+#!/bin/sh
+spago bundle --bundle-type app --outfile dist/Main.js --module "$@"
