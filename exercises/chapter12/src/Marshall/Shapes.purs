@@ -18,8 +18,6 @@ translate dx dy shape = shape
   }
 
 
-centerrect = {x: 250.0, y: 250.0, width: 100.0, height: 100.0}
-
 main :: Effect Unit
 main = void $ unsafePartial do
   Just canvas <- getCanvasElementById "canvas"
@@ -84,35 +82,34 @@ main = void $ unsafePartial do
                                    , width: 100.0
                                    , height: 100.0}
 
+  let centerrect = {x: 250.0, y: 250.0, width: 100.0, height: 100.0}
+
   -- two squares left center
   strokePath ctx $ do
      setStrokeStyle ctx "#80FFF0"
      rect ctx $ translate (-150.0) 0.0 centerrect
      rect ctx $ translate (-150.0) 110.0 centerrect
 
-  -- translation of similar code into non-do format.
   -- two squares right center
   -- The outer parens are required, or replace by "$".
-  {- strokePath ctx (setStrokeStyle ctx "#10D0A0" >>=
-                  \_ -> rect ctx (translate 150.0 0.0 centerrect) >>=
-                  \_ -> rect ctx (translate 150.0 110.0 centerrect))
-                  -}
-
-  -- two squares right center
-  let twoboxer = (setStrokeStyle ctx "#8080F0" >>=
+  let twoboxer = (setStrokeStyle ctx "#C080F0" >>=
                   \_ -> rect ctx (translate 150.0 0.0 centerrect) >>=
                   \_ -> rect ctx (translate 150.0 110.0 centerrect))
 
   -- Create a dummy value of type Effect Unit:
-  let maybeignored = setStrokeStyle ctx "#00FFF0"
+  let maybeignored = setStrokeStyle ctx "#FF0000"
+
+  -- doesn't display squares:
+  strokePath ctx maybeignored
 
   -- displays squares:
   strokePath ctx twoboxer
-  -- doesn't display squares:
-  strokePath ctx maybeignored
   -- This shows that the second arg to strokepath is not ignored.
   -- I was thinking maybe that all it did was build up the context,
   -- which was the only thing that was responsible for display.
+
+  -- doesn't display squares:
+  strokePath ctx maybeignored
 
   -- Yet in the definition of twoboxer, the return values of
   -- setStrokeStyle and the first rect, at least, are ignored.
@@ -120,3 +117,14 @@ main = void $ unsafePartial do
   -- or ... I don't know---something about ctx? 
   -- But twoboxter can only contain the return value of the second rect, right?
   -- It's not like a Lisp-2 e.g. Common Lisp with a separate function value.
+
+{- What's confusing is that in the def of twoboxer, nothing that
+is *returned* by the first two calls affects the third call. 
+Presumably, nothing it *returns* can have an effect, either. 
+Presumably, the effects are passed from one call to the next via
+changes to the context--i.e. to what the variable ctx refers to. 
+But then what is contained in twoboxer? What was returned as its
+value is something that has no effect, it would seem.  All of the
+effects are in the context.  Yet with maybeignored, *that*
+twoboxer context has no effect, as if ctx doesn't do anything,
+and all of the configuration is in the value of twoboxer. -}
