@@ -7,12 +7,13 @@ import Data.Maybe (Maybe(..))
 import Graphics.Canvas (closePath, lineTo, moveTo, fillPath, strokePath,
                         setFillStyle, setStrokeStyle, setLineWidth, arc, 
                         rect, getContext2D, getCanvasElementById)
+import Graphics.Canvas (translate) as GC
 import Data.Number as Number
 import Partial.Unsafe (unsafePartial)
 
-translate :: forall r . Number -> Number -> { x :: Number, y :: Number | r }
+trans :: forall r . Number -> Number -> { x :: Number, y :: Number | r }
                                          -> { x :: Number, y :: Number | r }
-translate dx dy shape = shape
+trans dx dy shape = shape
   { x = shape.x + dx    -- M: Using row polymorphism here
   , y = shape.y + dy
   }
@@ -25,7 +26,7 @@ main = void $ unsafePartial do
 
   setFillStyle ctx "#00F"
 
-  fillPath ctx $ rect ctx $ translate (-200.0) (-200.0)
+  fillPath ctx $ rect ctx $ trans (-200.0) (-200.0)
     { x: 250.0     -- M: this is a Rectangle by definition
     , y: 250.0
     , width: 100.0
@@ -34,7 +35,7 @@ main = void $ unsafePartial do
 
   setFillStyle ctx "#FF0"
 
-  fillPath ctx $ arc ctx $ translate 200.0 200.0
+  fillPath ctx $ arc ctx $ trans 200.0 200.0
     { x: 300.0
     , y: 300.0
     , radius: 50.0
@@ -45,28 +46,31 @@ main = void $ unsafePartial do
 
   setFillStyle ctx "#F00"
 
+  -- filled triangle
   fillPath ctx $ do
-    moveTo ctx 300.0 260.0
-    lineTo ctx 260.0 340.0
-    lineTo ctx 340.0 340.0
+    moveTo ctx 300.0 160.0
+    lineTo ctx 260.0 240.0
+    lineTo ctx 340.0 240.0
+    closePath ctx
+
+  -- sort of ex 1
+
+  -- triangle border
+  setStrokeStyle ctx "#A000FF"
+  setLineWidth ctx 5.0
+  strokePath ctx $ do
+    moveTo ctx 300.0 160.0
+    lineTo ctx 260.0 240.0
+    lineTo ctx 340.0 240.0
     closePath ctx
 
   -- Marshall's additions in resp to exercise prompts:
-
-  -- sort of ex 1
-  setStrokeStyle ctx "#A000FF"
-  setLineWidth ctx 5.0
-
-  strokePath ctx $ do
-    moveTo ctx 300.0 260.0
-    lineTo ctx 260.0 340.0
-    lineTo ctx 340.0 340.0
-    closePath ctx
 
   -- Will be ignored:
   setFillStyle ctx "#80FF80"
 
   -- ex 2
+  -- upper light blue squares
   -- It appears that the last setFillStyle in the do will apply to all
   -- filled objects made in ti.  I suppose fillPath does this.  Mutatis mutandis
   -- for setStrokeStyle and strokePath.
@@ -77,30 +81,24 @@ main = void $ unsafePartial do
               , width: 100.0
               , height: 100.0}
      setStrokeStyle ctx "#80d0F0"
-     rect ctx $ translate 0.0 35.0 { x: 400.0
+     rect ctx $ trans 0.0 35.0 { x: 400.0
                                    , y: 50.0
                                    , width: 100.0
                                    , height: 100.0}
 
   let centerrect = {x: 250.0, y: 250.0, width: 100.0, height: 100.0}
 
-  -- two squares left center
+  -- two squares left center, greenish blue
   strokePath ctx $ do
      setStrokeStyle ctx "#80FFF0"
-     rect ctx $ translate (-150.0) 0.0 centerrect
-     rect ctx $ translate (-150.0) 110.0 centerrect
+     rect ctx $ trans (-150.0) 0.0 centerrect
+     rect ctx $ trans (-150.0) 110.0 centerrect
 
-  -- two squares right center
-  -- The outer parens are required, or replace by "$".
+  -- Two squares, one above the other, to be drawn later.
+  -- (The outer parens are required, or replace by "$".)
   let twoboxer = (setStrokeStyle ctx "#C080F0" >>=
-                  \_ -> rect ctx (translate 150.0 0.0 centerrect) >>=
-                  \_ -> rect ctx (translate 150.0 110.0 centerrect))
-
-  -- Create a dummy value of type Effect Unit:
-  let maybeignored = setStrokeStyle ctx "#FF0000"
-
-  -- doesn't display squares:
-  strokePath ctx maybeignored
+                  \_ -> rect ctx (trans 150.0 0.0 centerrect) >>=
+                  \_ -> rect ctx (trans 150.0 110.0 centerrect))
 
   -- displays squares:
   strokePath ctx twoboxer
@@ -108,8 +106,14 @@ main = void $ unsafePartial do
   -- I was thinking maybe that all it did was build up the context,
   -- which was the only thing that was responsible for display.
 
-  -- doesn't display squares:
-  strokePath ctx maybeignored
+
+  -- No error, but nothing's showing up.
+  -- strokePath ctx (GC.translate ctx {translateX: (-100.0), translateY: 0.0})
+
+  -- let tctx = GC.translate ctx {translateX: (-100.0), translateY: 0.0}
+
+  -- strokePath tctx twoboxer
+
 
   -- Yet in the definition of twoboxer, the return values of
   -- setStrokeStyle and the first rect, at least, are ignored.
