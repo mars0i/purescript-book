@@ -1,2 +1,2 @@
-dist/Main.js: src/Marshall/Shapes.purs
-	./build Marshall.Shapes
+dist/Main.js: src/Marshall/MWE.purs
+	./build Marshall.MWE
