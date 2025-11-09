@@ -15,6 +15,7 @@ package:
     - web-dom
     - web-events
     - web-html
+    - quickcheck # added by Marshall
   name: my-project
 workspace:
   extraPackages: {}

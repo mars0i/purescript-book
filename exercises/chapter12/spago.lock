@@ -15,6 +15,7 @@
             "numbers",
             "partial",
             "prelude",
+            "quickcheck",
             "random",
             "refs",
             "web-dom",
@@ -47,6 +48,7 @@
             "invariant",
             "js-date",
             "lazy",
+            "lcg",
             "lists",
             "maybe",
             "media-types",
@@ -60,7 +62,9 @@
             "partial",
             "prelude",
             "profunctor",
+            "quickcheck",
             "random",
+            "record",
             "refs",
             "safe-coerce",
             "st",
@@ -4434,6 +4438,19 @@
         "prelude"
       ]
     },
+    "lcg": {
+      "type": "git",
+      "url": "https://github.com/purescript/purescript-lcg.git",
+      "rev": "67c6c6483a563a59ae036d9dca0f1be2835326a5",
+      "dependencies": [
+        "effect",
+        "integers",
+        "maybe",
+        "partial",
+        "prelude",
+        "random"
+      ]
+    },
     "lists": {
       "type": "git",
       "url": "https://github.com/purescript/purescript-lists.git",
@@ -4577,6 +4594,40 @@
         "tuples"
       ]
     },
+    "quickcheck": {
+      "type": "git",
+      "url": "https://github.com/purescript/purescript-quickcheck.git",
+      "rev": "bf5029f97e6c0d7552d3a08d2ab793a19e2c5e3d",
+      "dependencies": [
+        "arrays",
+        "console",
+        "control",
+        "effect",
+        "either",
+        "enums",
+        "exceptions",
+        "foldable-traversable",
+        "gen",
+        "identity",
+        "integers",
+        "lazy",
+        "lcg",
+        "lists",
+        "maybe",
+        "newtype",
+        "nonempty",
+        "numbers",
+        "partial",
+        "prelude",
+        "record",
+        "st",
+        "strings",
+        "tailrec",
+        "transformers",
+        "tuples",
+        "unfoldable"
+      ]
+    },
     "random": {
       "type": "git",
       "url": "https://github.com/purescript/purescript-random.git",
@@ -4584,6 +4635,16 @@
       "dependencies": [
         "effect",
         "integers"
+      ]
+    },
+    "record": {
+      "type": "git",
+      "url": "https://github.com/purescript/purescript-record.git",
+      "rev": "c89cd1ada6b636692571fc374196b1c39c4c9f70",
+      "dependencies": [
+        "functions",
+        "prelude",
+        "unsafe-coerce"
       ]
     },
     "refs": {
