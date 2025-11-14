@@ -16,8 +16,10 @@ package:
     - web-events
     - web-html
     - quickcheck # added by Marshall
+    - splitmix
   name: my-project
 workspace:
-  extraPackages: {}
   packageSet:
     url: https://raw.githubusercontent.com/purescript/package-sets/psc-0.15.2-20220615/packages.json
+  extraPackages:
+    splitmix: 2.1.0

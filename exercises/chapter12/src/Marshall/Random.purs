@@ -3,6 +3,7 @@ module Marshall.Random where
 import Prelude
 
 import Effect (Effect)
+import Effect.Console (log, logShow)
 import Effect.Random (random)
 import Data.Array ((..))
 import Data.Foldable (for_, foldl)
@@ -12,7 +13,8 @@ import Graphics.Canvas (strokePath, fillPath, arc, setStrokeStyle,
 import Data.Number as Number
 import Partial.Unsafe (unsafePartial)
 
-import Random.LCG
+-- import Random.LCG
+import Random.SplitMix as Split
 
 
 
@@ -20,33 +22,9 @@ import Random.LCG
 
 main :: Effect Unit
 main = void $ unsafePartial do
-  Just canvas <- getCanvasElementById "canvas"
-  ctx <- getContext2D canvas
 
--- ANCHOR: style
-  setFillStyle ctx "#0FF"
-  setStrokeStyle ctx "#000"
--- ANCHOR_END: style
+  let gen = Split.mk 42
+  logShow gen
+  logShow $ Split.nextNumber gen
+  logShow $ Split.nextNumber gen
 
--- ANCHOR: for
-  for_ (1 .. 100) \_ -> do
--- ANCHOR_END: for
--- ANCHOR: random
-    x <- random
-    y <- random
-    r <- random
--- ANCHOR_END: random
-
--- ANCHOR: path
-    let path = arc ctx
-         { x                  : x * 600.0
-         , y                  : y * 600.0
-         , radius             : r * 50.0
-         , start              : 0.0
-         , end                : Number.tau
-         , useCounterClockwise: false
-         }
-
-    fillPath ctx path
-    strokePath ctx path
--- ANCHOR_END: path

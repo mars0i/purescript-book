@@ -18,6 +18,7 @@
             "quickcheck",
             "random",
             "refs",
+            "splitmix",
             "web-dom",
             "web-events",
             "web-html"
@@ -44,6 +45,7 @@
             "functors",
             "gen",
             "identity",
+            "int64",
             "integers",
             "invariant",
             "js-date",
@@ -67,6 +69,7 @@
             "record",
             "refs",
             "safe-coerce",
+            "splitmix",
             "st",
             "strings",
             "tailrec",
@@ -4123,7 +4126,9 @@
         }
       }
     },
-    "extra_packages": {}
+    "extra_packages": {
+      "splitmix": "2.1.0"
+    }
   },
   "packages": {
     "arraybuffer-types": {
@@ -4395,6 +4400,21 @@
         "prelude"
       ]
     },
+    "int64": {
+      "type": "git",
+      "url": "https://github.com/purescript-contrib/purescript-int64.git",
+      "rev": "47a876aa3b1263c2bc9f47bcc80f3e3bf8c3103a",
+      "dependencies": [
+        "effect",
+        "foreign",
+        "functions",
+        "integers",
+        "maybe",
+        "nullable",
+        "prelude",
+        "quickcheck"
+      ]
+    },
     "integers": {
       "type": "git",
       "url": "https://github.com/purescript/purescript-integers.git",
@@ -4662,6 +4682,21 @@
       "rev": "7fa799ae80a38b8d948efcb52608e58e198b3da7",
       "dependencies": [
         "unsafe-coerce"
+      ]
+    },
+    "splitmix": {
+      "type": "registry",
+      "version": "2.1.0",
+      "integrity": "sha256-iZy+c5f+PqKfkxdgqCi5n/S/XDEoCVsoF4l79aw8pIs=",
+      "dependencies": [
+        "console",
+        "effect",
+        "int64",
+        "integers",
+        "maybe",
+        "partial",
+        "prelude",
+        "tuples"
       ]
     },
     "st": {
