@@ -31,10 +31,11 @@ splitgen = Split.mk 42
 -- blows stack:
 -- splitnums = splitlist splitgen
 
-splitTupList rng = LL.iterate nextnum (Tuple 0.0 rng)
-        where nextnum (Tuple _ g) = Split.nextNumber g
+nextstate rngtuple = 
+        let (Tuple _ g) = rngtuple in
+            Split.nextNumber g
 
-splitTups = splitTupList splitgen
+splitTups = LL.iterate nextstate (Tuple (-24.0) splitgen)
 
 
 -- blows stack when run
@@ -48,6 +49,10 @@ lcggen = LCG.mkSeed 42
 
 
 
+blah :: Maybe (Tuple Number Split.SMGen) -> Number
+blah Nothing = (-1.0)
+blah (Just (Tuple x _)) = x
+
 
 
 -- randnos = foldl (\x -> lcgNext x) [] [42]
@@ -56,10 +61,14 @@ main :: Effect Unit
 main = void $ unsafePartial do
 
   log "Yow.\n"
-
-  logShow $ LL.take 5 splitTups
-
+  logShow $ LL.head splitTups
   log "\n"
+  logShow $ LL.take 5 splitTups
+  log "\n"
+
+  logShow $ blah $ LL.index splitTups 2
+
+
 
   -- logShow $ LL.map fst (LL.take 5 splitTups)
 
