@@ -5,16 +5,48 @@ import Prelude
 import Effect (Effect)
 import Effect.Console (log, logShow)
 import Effect.Random (random)
-import Data.Array ((..))
-import Data.Foldable (for_, foldl)
+--import Data.Array ((..))
+import Data.List.Lazy as LL
+import Data.List.Lazy.Types as LT
+import Data.Tuple
+-- import Data.Foldable (for_, foldl)
 import Data.Maybe (Maybe(..))
-import Graphics.Canvas (strokePath, fillPath, arc, setStrokeStyle,
-                        setFillStyle, getContext2D, getCanvasElementById)
+-- import Graphics.Canvas (strokePath, fillPath, arc, setStrokeStyle,
+--                        setFillStyle, getContext2D, getCanvasElementById)
 import Data.Number as Number
 import Partial.Unsafe (unsafePartial)
 
--- import Random.LCG
+import Random.LCG as LCG
+
+-- Haskell docs: https://hackage.haskell.org/package/splitmix
 import Random.SplitMix as Split
+
+
+-- blows stack when run
+splitlist rng =
+        let (Tuple x g) = Split.nextNumber rng in
+            LT.cons x (splitlist g)
+
+splitgen = Split.mk 42
+-- blows stack:
+-- splitnums = splitlist splitgen
+
+splitTupList rng = LL.iterate nextnum (Tuple 0.0 rng)
+        where nextnum (Tuple _ g) = Split.nextNumber g
+
+splitTups = splitTupList splitgen
+
+
+-- blows stack when run
+lcglist x = 
+        let x' = LCG.lcgNext x in
+            LT.cons x' (lcglist x')
+
+lcggen = LCG.mkSeed 42
+-- blows stack:
+-- lcgnums = lcglist lcggen
+
+
 
 
 
@@ -23,8 +55,18 @@ import Random.SplitMix as Split
 main :: Effect Unit
 main = void $ unsafePartial do
 
-  let gen = Split.mk 42
-  logShow gen
-  logShow $ Split.nextNumber gen
-  logShow $ Split.nextNumber gen
+  log "Yow.\n"
+
+  logShow $ LL.take 5 splitTups
+
+  log "\n"
+
+  -- logShow $ LL.map fst (LL.take 5 splitTups)
+
+
+  -- logShow splitgen
+  -- logShow $ Split.nextNumber splitgen
+
+  -- logShow $ LL.take 10 splitnums
+  -- logShow $ LL.take 4 lcgnums
 
