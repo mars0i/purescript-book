@@ -15,7 +15,8 @@ package:
     - web-dom
     - web-events
     - web-html
-    - quickcheck # added by Marshall
+    - quickcheck
+    - lazy
     - splitmix
   name: my-project
 workspace:

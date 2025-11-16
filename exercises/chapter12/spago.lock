@@ -11,6 +11,7 @@
             "effect",
             "foldable-traversable",
             "integers",
+            "lazy",
             "maybe",
             "numbers",
             "partial",

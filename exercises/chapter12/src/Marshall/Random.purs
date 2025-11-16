@@ -6,8 +6,9 @@ import Effect (Effect)
 import Effect.Console (log, logShow)
 import Effect.Random (random)
 --import Data.Array ((..))
-import Data.List.Lazy as LL
-import Data.List.Lazy.Types as LT
+-- import Data.Lazy
+import Data.List.Lazy.Types as LT -- defines lazy List in terms of Data.Lazy (which memoizes)
+import Data.List.Lazy as LL -- extra operatons for Lazy Lists
 import Data.Tuple
 -- import Data.Foldable (for_, foldl)
 import Data.Maybe (Maybe(..))
