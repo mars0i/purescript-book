@@ -1,13 +1,16 @@
 -- From the "Mutable State" section of chapter 8 in Purescript by Example
 module Marshall.State where
 
+import Data.List
 import Prelude
 
+import Control.Monad.ST (ST, for, run)
+import Control.Monad.ST.Ref (modify, new, read)
+import Data.Profunctor.Choice ((+++))
 import Effect (Effect)
 import Effect.Console (log, logShow)
 
-import Control.Monad.ST.Ref (modify, new, read)
-import Control.Monad.ST (ST, for, run)
+import Data.Either
 
 simulate0 :: forall r. Number -> Number -> Int -> ST r Number
 simulate0 x0 v0 time = do
@@ -34,6 +37,30 @@ simulate2 x0 v0 time = do
     modify (\o -> { v: o.v - 9.81 * 0.001,  x: o.x + o.v * 0.001}) ref
   final <- read ref
   pure final.x
+
+-- From Learn You a Haskell pp. 314f:
+type Stack = List Int
+
+pop :: Stack -> {v :: Int, s :: Stack}
+pop (x : xs) = {v: x, s: xs}
+pop Nil = {v: -42, s: Nil} -- kludge
+
+push :: Int -> Stack -> Stack
+push x xs = x : xs
+
+
+
+
+
+
+{-
+pop (x : xs) = ?ya -- {v: x, s: xs}
+pop (x : xs) = {v: x, s: xs}
+        -}
+
+
+
+
 
 main :: Effect Unit
 main = do
