@@ -49,21 +49,22 @@ push :: Int -> Stack -> Stack
 push x xs = x : xs
 
 
-
-
-
-
-{-
-pop (x : xs) = ?ya -- {v: x, s: xs}
-pop (x : xs) = {v: x, s: xs}
-        -}
-
-
-
-
-
 main :: Effect Unit
 main = do
+        -- Try out the LYaH stack:
+        let s0 = push 3 Nil
+        let s1 = push 4 s0
+        let s2 = push 17 s1
+        let s3 = push (-32) s2
+        logShow s3
+        let {v, s} = pop s3
+        logShow v
+        logShow s
+        let {v, s} = pop s
+        logShow v
+        logShow s
+
+
         let x = simulate1 100.0 0.0 4
         logShow x
         let y = simulate1 100.0 0.0 2
