@@ -19,7 +19,7 @@ import Partial.Unsafe (unsafePartial)
 
 import Random.LCG as LCG
 
--- Haskell docs: https://hackage.haskell.org/package/splitmix
+-- See notes in my ~/purescript/random.tips
 import Random.SplitMix as Split
 
 
